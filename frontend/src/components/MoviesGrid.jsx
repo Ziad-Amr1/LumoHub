@@ -1,6 +1,7 @@
 // src/components/MoviesGrid.jsx
 import React from "react";
 import { Star } from "lucide-react";
+import { Link } from "react-router-dom"; // 👈 استدعاء Link من React Router
 
 const sampleMovies = [
   {
@@ -45,7 +46,8 @@ export default function MoviesGrid({ movies = sampleMovies }) {
         {/* Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
           {movies.map((movie) => (
-            <div
+            <Link
+              to={`/movie/${movie.id}`} // 👈 فتح صفحة تفاصيل الفيلم
               key={movie.id}
               className="relative bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition"
             >
@@ -58,9 +60,9 @@ export default function MoviesGrid({ movies = sampleMovies }) {
                 />
                 {/* Overlay عند Hover */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-                  <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow">
+                  <span className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow">
                     View Details
-                  </button>
+                  </span>
                 </div>
                 {/* Badge للتقييم */}
                 <span className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
@@ -76,7 +78,7 @@ export default function MoviesGrid({ movies = sampleMovies }) {
                 </h3>
                 <p className="text-sm text-muted-foreground">{movie.year}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

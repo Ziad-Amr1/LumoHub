@@ -11,6 +11,9 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
+// 👇 صفحة تفاصيل الفيلم
+import MovieDetails from "./pages/MovieDetails";
+
 function App() {
   return (
     <ThemeProvider>
@@ -27,7 +30,17 @@ function App() {
               }
             />
 
-            {/* Login page برضه يظهر بNavbar + Footer */}
+            {/* صفحة تفاصيل الفيلم */}
+            <Route
+              path="/movie/:id"
+              element={
+                <Layout>
+                  <MovieDetails />
+                </Layout>
+              }
+            />
+
+            {/* Login page */}
             <Route
               path="/login"
               element={
@@ -37,7 +50,7 @@ function App() {
               }
             />
 
-            {/* Register page برضه يظهر بNavbar + Footer */}
+            {/* Register page */}
             <Route
               path="/register"
               element={
@@ -47,7 +60,7 @@ function App() {
               }
             />
 
-            {/* Profile محمية بالـ login */}
+            {/* Profile محمية */}
             <Route
               path="/profile"
               element={

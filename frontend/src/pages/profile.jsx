@@ -35,7 +35,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(profile)
 
-  // Mock data (هنا تقدر تجيب بيانات من API أو DB)
+  // Mock data (replace with real data as needed with API or DB)
   const [recent] = useState([
     { id: 1, title: "Inception", image: "/placeholder.svg" },
     { id: 2, title: "Interstellar", image: "/placeholder.svg" },
@@ -136,10 +136,11 @@ export default function ProfilePage() {
       {/* Tabs for Media Sections */}
       <div className="max-w-4xl mx-auto mt-10 px-6">
         <Tabs defaultValue="recent">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="recent">Recently Watched</TabsTrigger>
             <TabsTrigger value="favorites">Favorites</TabsTrigger>
             <TabsTrigger value="later">Watch Later</TabsTrigger>
+            <TabsTrigger value="watched">Watched</TabsTrigger>
           </TabsList>
 
           {/* Recent */}
@@ -212,6 +213,13 @@ export default function ProfilePage() {
             ) : (
               <p className="text-sm text-muted-foreground">No watchlist yet.</p>
             )}
+          </TabsContent>
+
+          {/* Watched */}
+          <TabsContent value="watched" className="mt-4">
+            <p className="text-sm text-muted-foreground">
+              You haven’t marked any movie as watched yet.
+            </p>
           </TabsContent>
         </Tabs>
       </div>

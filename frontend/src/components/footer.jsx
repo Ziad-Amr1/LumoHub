@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <a href="/" className="flex items-center space-x-2 mb-4">
               <Film className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">CineStream</span>
+              <span className="text-xl font-bold text-foreground">MovieHub</span>
             </a>
             <p className="text-muted-foreground max-w-md">
               Your ultimate destination for discovering and exploring the latest movies. Stream, rate, and share your
