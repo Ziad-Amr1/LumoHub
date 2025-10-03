@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
@@ -12,6 +13,12 @@ import {
   DialogFooter,
   DialogDescription,
 } from "../components/ui/dialog"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs"
 import { Camera, Loader2, LogOut, Pencil } from "lucide-react"
 
 export default function ProfilePage() {
@@ -27,6 +34,21 @@ export default function ProfilePage() {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(profile)
+
+  // Mock data (هنا تقدر تجيب بيانات من API أو DB)
+  const [recent] = useState([
+    { id: 1, title: "Inception", image: "/placeholder.svg" },
+    { id: 2, title: "Interstellar", image: "/placeholder.svg" },
+    { id: 3, title: "The Dark Knight", image: "/placeholder.svg" },
+  ])
+  const [favorites] = useState([
+    { id: 4, title: "Shutter Island", image: "/placeholder.svg" },
+    { id: 5, title: "The Matrix", image: "/placeholder.svg" },
+  ])
+  const [watchLater] = useState([
+    { id: 6, title: "Dune: Part Two", image: "/placeholder.svg" },
+    { id: 7, title: "Oppenheimer", image: "/placeholder.svg" },
+  ])
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -56,7 +78,6 @@ export default function ProfilePage() {
 
   const handleSignOut = () => {
     console.log("Signing out...")
-    // هنا هتحطي كود تسجيل الخروج (Firebase/Auth/etc)
   }
 
   return (
@@ -110,6 +131,89 @@ export default function ProfilePage() {
             {profile.bio || "No bio yet."}
           </p>
         </div>
+      </div>
+
+      {/* Tabs for Media Sections */}
+      <div className="max-w-4xl mx-auto mt-10 px-6">
+        <Tabs defaultValue="recent">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="recent">Recently Watched</TabsTrigger>
+            <TabsTrigger value="favorites">Favorites</TabsTrigger>
+            <TabsTrigger value="later">Watch Later</TabsTrigger>
+          </TabsList>
+
+          {/* Recent */}
+          <TabsContent value="recent" className="mt-4">
+            {recent.length > 0 ? (
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {recent.map((movie) => (
+                  <Link
+                    key={movie.id}
+                    to={`/movie/${movie.id}`}
+                    className="w-36 flex-shrink-0 rounded-lg overflow-hidden shadow bg-muted hover:scale-105 transition-transform"
+                  >
+                    <img
+                      src={movie.image}
+                      alt={movie.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <p className="p-2 text-sm font-medium truncate">{movie.title}</p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No recent activity.</p>
+            )}
+          </TabsContent>
+
+          {/* Favorites */}
+          <TabsContent value="favorites" className="mt-4">
+            {favorites.length > 0 ? (
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {favorites.map((movie) => (
+                  <Link
+                    key={movie.id}
+                    to={`/movie/${movie.id}`}
+                    className="w-36 flex-shrink-0 rounded-lg overflow-hidden shadow bg-muted hover:scale-105 transition-transform"
+                  >
+                    <img
+                      src={movie.image}
+                      alt={movie.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <p className="p-2 text-sm font-medium truncate">{movie.title}</p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No favorites yet.</p>
+            )}
+          </TabsContent>
+
+          {/* Watch Later */}
+          <TabsContent value="later" className="mt-4">
+            {watchLater.length > 0 ? (
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {watchLater.map((movie) => (
+                  <Link
+                    key={movie.id}
+                    to={`/movie/${movie.id}`}
+                    className="w-36 flex-shrink-0 rounded-lg overflow-hidden shadow bg-muted hover:scale-105 transition-transform"
+                  >
+                    <img
+                      src={movie.image}
+                      alt={movie.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <p className="p-2 text-sm font-medium truncate">{movie.title}</p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No watchlist yet.</p>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Edit Dialog */}
