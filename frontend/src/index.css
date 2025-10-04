@@ -28,3 +28,8 @@ html, body {
   width: 100%;
   font-family: system-ui, sans-serif;
 }
+
+body, html {
+  width: 100%;
+  overflow-x: hidden;
+}
