@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Play, Heart, Bookmark, Eye, Share2, Star } from "lucide-react"
+import { toast, ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
+import { CustomToast } from "../components/ui/CustomToast" // تأكد من المسار
 
 // Mock API
 const fetchMovieById = async (id) => {
@@ -13,7 +16,7 @@ const fetchMovieById = async (id) => {
     genres: ["Action", "Sci-Fi", "Thriller"],
     overview:
       "A thief who steals corporate secrets through the use of dream-sharing technology...",
-    poster: "https://www.bing.com/ck/a?!&&p=6cd8596b0753d2ab9b481ed6e4fb62475e2aaff93bb913e124d553b4ff41e6efJmltdHM9MTc1OTQ0OTYwMA&ptn=3&ver=2&hsh=4&fclid=3548b7c4-dc9f-6a09-36fc-a1b6dd3e6bc1&u=a1L2ltYWdlcy9zZWFyY2g_cT1pbmNlcHRpb24rcG9zdGVyJmlkPUVDRDY5RTVCODgyQjZFOTRDRDA1MDI5NUU2RkI4NTkxRjU5NzlBMTEmRk9STT1JQUNGSVI&ntb=1http://www.impawards.com/2010/posters/inception.jpg",
+    poster: "https://www.impawards.com/2010/posters/inception.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
     trailer: "https://www.youtube.com/embed/YoHD9XEInc0",
     cast: [
@@ -96,28 +99,60 @@ export default function MovieDetails() {
     loadSimilar()
   }, [id])
 
-  const handleFavorite = () => setIsFavorite(!isFavorite)
-  const handleWatchlist = () => setIsWatchlist(!isWatchlist)
-  const handleWatched = () => setIsWatched(!isWatched)
+  // ==================== Handlers مع Toast ====================
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite)
+    toast(<CustomToast 
+            type="favorite" 
+            message={!isFavorite ? "تمت إضافة الفيلم للمفضلة!" : "تمت إزالة الفيلم من المفضلة"} 
+          />)
+  }
+
+  const handleWatchlist = () => {
+    setIsWatchlist(!isWatchlist)
+    toast(<CustomToast 
+            type="watchlist" 
+            message={!isWatchlist ? "تمت إضافة الفيلم للقائمة!" : "تمت إزالة الفيلم من القائمة"} 
+          />)
+  }
+
+  const handleWatched = () => {
+    setIsWatched(!isWatched)
+    toast(<CustomToast 
+            type="watched" 
+            message={!isWatched ? "تمت مشاهدة الفيلم!" : "تمت إزالة العلامة 'تمت المشاهدة'"} 
+          />)
+  }
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({ title: movie.title, url: window.location.href })
+      toast(<CustomToast type="share" message="تم مشاركة الفيلم!" />)
     } else {
       navigator.clipboard.writeText(window.location.href)
-      alert("Link copied!")
+      toast(<CustomToast type="share" message="تم نسخ رابط الفيلم!" />)
     }
   }
 
-  if (loading) {
-    return <div className="p-10 text-center text-gray-500">Loading...</div>
-  }
+  // ==================== Loading / Error ====================
+  if (loading) return <div className="p-10 text-center text-gray-500">Loading...</div>
+  if (!movie) return <div className="p-10 text-center text-red-500">Movie not found</div>
 
-  if (!movie) {
-    return <div className="p-10 text-center text-red-500">Movie not found</div>
-  }
-
+  // ==================== Render ====================
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
+      {/* ToastContainer مركزي */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
+
       {/* Hero */}
       <div className="relative h-[400px] w-full overflow-hidden">
         <img

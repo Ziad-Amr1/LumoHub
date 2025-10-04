@@ -1,0 +1,18 @@
+{ movies = [
+id,
+    title: "Inception",
+    releaseDate: "2010-07-16",
+    rating: 8.8,
+    runtime: 148,
+    genres: ["Action", "Sci-Fi", "Thriller"],
+    overview:
+      "A thief who steals corporate secrets through the use of dream-sharing technology...",
+    poster: "https://www.bing.com/ck/a?!&&p=6cd8596b0753d2ab9b481ed6e4fb62475e2aaff93bb913e124d553b4ff41e6efJmltdHM9MTc1OTQ0OTYwMA&ptn=3&ver=2&hsh=4&fclid=3548b7c4-dc9f-6a09-36fc-a1b6dd3e6bc1&u=a1L2ltYWdlcy9zZWFyY2g_cT1pbmNlcHRpb24rcG9zdGVyJmlkPUVDRDY5RTVCODgyQjZFOTRDRDA1MDI5NUU2RkI4NTkxRjU5NzlBMTEmRk9STT1JQUNGSVI&ntb=1http://www.impawards.com/2010/posters/inception.jpg",
+    backdrop: "https://image.tmdb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
+    trailer: "https://www.youtube.com/embed/YoHD9XEInc0",
+    cast: [
+      { id: 1, name: "Leonardo DiCaprio", character: "Cobb", image: "https://via.placeholder.com/150" },
+      { id: 2, name: "Joseph Gordon-Levitt", character: "Arthur", image: "https://via.placeholder.com/150" },
+      { id: 3, name: "Ellen Page", character: "Ariadne", image: "https://via.placeholder.com/150" },
+    ],
+  }
