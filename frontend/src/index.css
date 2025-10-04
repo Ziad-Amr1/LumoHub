@@ -1,3 +1,4 @@
+/* Src/index.css */
 @import "tailwindcss";
 
 @theme {
@@ -16,4 +17,19 @@
   --color-light-text: #1c1c1c;
   --color-light-text-secondary: #555555;
   --color-light-accent: #1976d2;
+}
+
+/* Global Styles */
+html, body {
+  @apply bg-light-bg1 dark:bg-dark-bg1 text-light-text dark:text-dark-text;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  font-family: system-ui, sans-serif;
+}
+
+body, html {
+  width: 100%;
+  overflow-x: hidden;
 }
