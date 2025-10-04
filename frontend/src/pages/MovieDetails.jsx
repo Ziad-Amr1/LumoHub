@@ -1,64 +1,36 @@
+// src/pages/MovieDetails.jsx
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Play, Heart, Bookmark, Eye, Share2, Star } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
-import { CustomToast } from "../components/ui/CustomToast" // تأكد من المسار
+import { CustomToast } from "../components/CustomToast"
+import  moviesData  from "../data/moviesData"   // import data
 
-// Mock API
+// ==================== Functions Mock API ====================
+
+// fetch movie by id
 const fetchMovieById = async (id) => {
-  return {
-    id,
-    title: "Inception",
-    releaseDate: "2010-07-16",
-    rating: 8.8,
-    runtime: 148,
-    genres: ["Action", "Sci-Fi", "Thriller"],
-    overview:
-      "A thief who steals corporate secrets through the use of dream-sharing technology...",
-    poster: "https://www.impawards.com/2010/posters/inception.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
-    trailer: "https://www.youtube.com/embed/YoHD9XEInc0",
-    cast: [
-      { id: 1, name: "Leonardo DiCaprio", character: "Cobb", image: "https://via.placeholder.com/150" },
-      { id: 2, name: "Joseph Gordon-Levitt", character: "Arthur", image: "https://via.placeholder.com/150" },
-      { id: 3, name: "Ellen Page", character: "Ariadne", image: "https://via.placeholder.com/150" },
-    ],
-  }
+  return moviesData.find((m) => m.id === Number(id))
 }
 
-// Mock API for similar movies
+// fetch similar movies (mock logic)
 const fetchSimilarMovies = async (id) => {
-  return [
-    {
-      id: "m1",
-      title: "Interstellar",
-      year: "2014",
-      rating: 8.6,
-      poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-    },
-    {
-      id: "m2",
-      title: "The Dark Knight",
-      year: "2008",
-      rating: 9.0,
-      poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-    },
-    {
-      id: "m3",
-      title: "Tenet",
-      year: "2020",
-      rating: 7.4,
-      poster: "https://image.tmdb.org/t/p/w500/k68nPLbIST6NP96JmTxmZijEvCA.jpg",
-    },
-    {
-      id: "m4",
-      title: "Shutter Island",
-      year: "2010",
-      rating: 8.2,
-      poster: "https://image.tmdb.org/t/p/w500/kve20tXwUZpu4GUX8l6X7Z4jmL6.jpg",
-    },
-  ]
+  const movie = moviesData.find((m) => m.id === Number(id))
+  if (!movie) return []
+
+  // Simple mock: return random 4 movies excluding current movie
+  return moviesData
+    .filter((m) => m.id !== Number(id))
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4)
+    .map((m) => ({
+      id: m.id,
+      title: m.title,
+      year: m.releaseDate.split("-")[0],
+      rating: m.rating,
+      poster: m.poster
+    }))
 }
 
 export default function MovieDetails() {
@@ -99,12 +71,12 @@ export default function MovieDetails() {
     loadSimilar()
   }, [id])
 
-  // ==================== Handlers مع Toast ====================
+  // ==================== Handlers with Toast ====================
   const handleFavorite = () => {
     setIsFavorite(!isFavorite)
     toast(<CustomToast 
             type="favorite" 
-            message={!isFavorite ? "تمت إضافة الفيلم للمفضلة!" : "تمت إزالة الفيلم من المفضلة"} 
+            message={!isFavorite ? "Done! Added to favorites." : "Done! Removed from favorites."}
           />)
   }
 
@@ -112,7 +84,7 @@ export default function MovieDetails() {
     setIsWatchlist(!isWatchlist)
     toast(<CustomToast 
             type="watchlist" 
-            message={!isWatchlist ? "تمت إضافة الفيلم للقائمة!" : "تمت إزالة الفيلم من القائمة"} 
+            message={!isWatchlist ? "Done! Added to watchlist." : "Done! Removed from watchlist."}
           />)
   }
 
@@ -120,17 +92,17 @@ export default function MovieDetails() {
     setIsWatched(!isWatched)
     toast(<CustomToast 
             type="watched" 
-            message={!isWatched ? "تمت مشاهدة الفيلم!" : "تمت إزالة العلامة 'تمت المشاهدة'"} 
+            message={!isWatched ? "Done! Watched." : "Done! Removed watched status."}
           />)
   }
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({ title: movie.title, url: window.location.href })
-      toast(<CustomToast type="share" message="تم مشاركة الفيلم!" />)
+      toast(<CustomToast type="share" message="Done! Shared movie." />)
     } else {
       navigator.clipboard.writeText(window.location.href)
-      toast(<CustomToast type="share" message="تم نسخ رابط الفيلم!" />)
+      toast(<CustomToast type="share" message="Done! Copied movie link." />)
     }
   }
 
@@ -141,7 +113,7 @@ export default function MovieDetails() {
   // ==================== Render ====================
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
-      {/* ToastContainer مركزي */}
+      {/* ToastContainer Center */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -161,7 +133,7 @@ export default function MovieDetails() {
           className="absolute inset-0 w-full h-full object-cover opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        <div className="relative z-10 container mx-auto px-6 py-16">
+        <div className="relative z-10 container mx-auto px-6 py-16 pt-45">
           <h1 className="text-4xl font-bold">{movie.title}</h1>
           <div className="flex items-center gap-4 mt-3 text-sm text-gray-300">
             <span>{movie.releaseDate.split("-")[0]}</span>

@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout";
 import Hero from "../components/hero";
 import SearchSection from "../components/search-section";
 import FeaturedMovies from "../components/featured-movies";
-import MoviesGrid from "../components/MoviesGrid";
+import PopularMovies from "../components/PopularMovies";
 
 export default function HomePage() {
   return (
@@ -11,7 +11,7 @@ export default function HomePage() {
       <Hero />
       <SearchSection />
       <FeaturedMovies />
-      <MoviesGrid />
+      <PopularMovies />
   </>
   );
 }

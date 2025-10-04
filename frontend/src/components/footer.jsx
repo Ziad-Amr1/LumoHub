@@ -18,7 +18,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-4">
               <Film className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">MovieHub</span>
+              <span className="text-xl font-bold text-foreground">LumoHub</span>
             </Link>
             <p className="text-muted-foreground max-w-md">
               Your ultimate destination for discovering and exploring the latest movies. Stream, rate, and share your
@@ -101,7 +101,7 @@ export default function Footer() {
         {/* Bottom Copyright */}
         <div className="border-t border-border mt-8 pt-8 text-center">
           <p className="text-muted-foreground text-sm">
-            © 2025 MovieHub. All rights reserved.
+            © 2025 LumoHub. All rights reserved.
           </p>
         </div>
       </div>

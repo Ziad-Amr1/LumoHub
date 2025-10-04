@@ -94,7 +94,7 @@ export default function Navbar() {
             isDark ? "text-dark-primary" : "text-light-primary"
           }`}
         >
-          🎬 MovieHub
+          🎬 LumoHub
         </Link>
 
         {/* Desktop Links */}

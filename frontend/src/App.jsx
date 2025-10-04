@@ -6,7 +6,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Layout from "./layouts/Layout";
 import MovieDetails from "./pages/MovieDetails";
-import AllMovies from "./pages/AllMovies";
+import Movies from "./pages/Movies";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -52,7 +52,7 @@ function App() {
                 path="/movies"
                 element={
                   <Layout>
-                    <AllMovies />
+                    <Movies />
                   </Layout>
                 }
               />

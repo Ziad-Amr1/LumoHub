@@ -7,7 +7,7 @@ export default function MoviesGrid() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch movies لما الصفحة تفتح
+  // Fetch movies from TMDB API
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -63,13 +63,13 @@ export default function MoviesGrid() {
                   alt={movie.title}
                   className="w-full h-64 object-cover"
                 />
-                {/* Overlay عند Hover */}
+                {/* Overlay when hovered */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
                   <span className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow">
                     View Details
                   </span>
                 </div>
-                {/* Badge للتقييم */}
+                {/* Badge for rating */}
                 <span className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
                   <Star className="h-3 w-3 fill-current text-yellow-400" />
                   {movie.vote_average.toFixed(1)}

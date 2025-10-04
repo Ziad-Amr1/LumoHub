@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = (email, password) => {
-    // بيانات تجريبية
+    // Test user credentials
     if (email === "admin@test.com" && password === "12345678") {
       const userData = { name: "Admin User", email };
       setUser(userData);
