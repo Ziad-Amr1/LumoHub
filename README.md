@@ -1,16 +1,94 @@
-# React + Vite
+# LumoHub 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**LumoHub** is a modern movie streaming platform built with **React**, **Tailwind CSS**, and the **TMDB API**.  
+It provides a responsive and user-friendly interface for discovering, searching, and watching movies on both desktop and mobile devices.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- Browse popular, trending, and upcoming movies
+- Search movies by title, genre, or year
+- View detailed movie information (overview, rating, genres, runtime)
+- Watch movie trailers
+- Explore movie cast and crew
+- Discover similar movies and recommendations
+- Add movies to your personal watchlist
+- Dark/Light theme toggle
+- Responsive design
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🗂 Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+LumoHub/
+├─ backend/ # Node.js / Express backend
+├─ frontend/ # React frontend
+└─ README.md
+
+yaml
+Copy code
+
+> ⚠️ To run the frontend, you need to enter the `frontend` folder.
+
+---
+
+## 💻 Getting Started
+
+### 1️⃣ Backend
+
+1. Navigate to the backend folder:
+
+```bash
+cd backend
+Install dependencies:
+
+bash
+Copy code
+npm install
+Start the backend server:
+
+bash
+Copy code
+npm start
+The backend will typically run on http://localhost:5000 (or the port specified in your config).
+
+2️⃣ Frontend
+Navigate to the frontend folder:
+
+bash
+Copy code
+cd frontend
+Install dependencies:
+
+bash
+Copy code
+npm install
+Create a .env file in the frontend folder and add your TMDB API key:
+
+env
+Copy code
+REACT_APP_TMDB_API_KEY=your_api_key_here
+Start the frontend development server:
+
+bash
+Copy code
+npm start
+Open your browser and navigate to:
+
+arduino
+Copy code
+http://localhost:3000
+🤝 Contributing
+We welcome contributions from everyone!
+
+Report bugs or request features via GitHub Issues
+
+Fork the repo and submit Pull Requests
+
+Improve UI, add features, or fix issues
+
+Please follow best practices and maintain clean, readable code.
+
+📝 License
+This project is licensed under the MIT License. See LICENSE.md for details.
