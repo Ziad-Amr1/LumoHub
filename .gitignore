@@ -26,4 +26,16 @@ dist-ssr
 venv/
 __pycache__/
 *.pyc
+*.env
 
+
+# React / Node
+frontend/node_modules/
+frontend/build/
+
+*.py[cod]
+*.pyo
+
+backend/logs/
+backend/venv/
+Thumbs.db
