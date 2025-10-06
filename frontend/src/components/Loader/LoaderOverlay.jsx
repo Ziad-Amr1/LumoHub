@@ -1,6 +1,8 @@
+// src/components/LoaderOverlay.jsx
+// Handles route changes to show/hide the loading overlay
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { usePageLoader } from "../context/PageLoaderContext";
+import { usePageLoader } from "../../context/PageLoaderContext";
 
 export default function RouteChangeHandler() {
   const location = useLocation();

@@ -1,111 +1,124 @@
-import React from "react";
+// src/App.jsx
+import React, { Suspense, lazy } from "react";
 import "./App.css";
-import Home from "./pages/home";
-import Profile from "./pages/profile";
-import Login from "./pages/login";
-import Register from "./pages/register";
+import { Routes, Route } from "react-router-dom";
+
+// 🧱 Layout & Components
 import Layout from "./layouts/Layout";
-import MovieDetails from "./pages/MovieDetails";
-import Movies from "./pages/Movies";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { ThemeProvider } from "./context/ThemeContext";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { PageLoaderProvider } from "./context/PageLoaderContext.jsx";
-import LoaderOverlay from "./components/LoaderOverlay";
-import RouteChangeHandler from "./components/RouteChangeHandler";
-import { toast, ToastContainer, Slide } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
+import PageLoadingOverlay from "./components/PageLoadingOverlay";
 
+// 🔔 Toast Notifications
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function App() {
+// 💤 Lazy Pages
+const Home = lazy(() => import("./pages/home"));
+const Profile = lazy(() => import("./pages/profile"));
+const Login = lazy(() => import("./pages/login"));
+const Register = lazy(() => import("./pages/register"));
+const MovieDetails = lazy(() => import("./pages/MovieDetails"));
+const Movies = lazy(() => import("./pages/Movies"));
+
+import { motion } from "framer-motion";
+
+function AnimatedPageLoader() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <PageLoaderProvider>
-          <Router>
-            <LoaderOverlay />
-            <RouteChangeHandler />
-            <Routes>
-              {/* Home page */}
-              <Route
-                path="/"
-                element={
-                  <Layout>
-                    <Home />
-                  </Layout>
-                }
-              />
-
-              {/* Movie Details */}
-              <Route
-                path="/movie/:id"
-                element={
-                  <Layout>
-                    <MovieDetails />
-                  </Layout>
-                }
-              />
-
-              {/* All Movies */}
-              <Route
-                path="/movies"
-                element={
-                  <Layout>
-                    <Movies />
-                  </Layout>
-                }
-              />
-
-              {/* Login page */}
-              <Route
-                path="/login"
-                element={
-                  <Layout>
-                    <Login />
-                  </Layout>
-                }
-              />
-
-              {/* Register page */}
-              <Route
-                path="/register"
-                element={
-                  <Layout>
-                    <Register />
-                  </Layout>
-                }
-              />
-
-              {/* Profile */}
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Layout>
-                      <Profile />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Router>
-
-          <ToastContainer
-                  position="top-right"
-                  autoClose={3000} // Auto close after 3 seconds
-                  hideProgressBar
-                  newestOnTop
-                  closeOnClick
-                  pauseOnHover
-                  draggable
-                  theme="dark"
-                  transition={Slide} 
-          />
-        </PageLoaderProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-gray-200">
+      <motion.div
+        className="w-14 h-14 border-4 border-purple-600 border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      />
+      <motion.p
+        className="mt-4 text-sm tracking-wider text-gray-400"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+      >
+        Loading...
+      </motion.p>
+    </div>
   );
 }
 
-export default App;
+// ==================== 🌍 App ====================
+export default function App() {
+  return (
+    <>
+      {/* Overlay أثناء التنقل */}
+      <PageLoadingOverlay />
+
+      <Suspense fallback={<AnimatedPageLoader />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <Layout>
+                <Movies />
+              </Layout>
+            }
+          />
+          <Route
+            path="/movie/:id"
+            element={
+              <Layout>
+                <MovieDetails />
+              </Layout>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Layout>
+                <Login />
+              </Layout>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Layout>
+                <Register />
+              </Layout>
+            }
+          />
+
+          {/* Protected */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Profile />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
+
+      {/* Toasts */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+        transition={Slide}
+      />
+    </>
+  );
+}

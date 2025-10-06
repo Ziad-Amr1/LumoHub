@@ -1,3 +1,4 @@
+// src/context/PageLoaderContext.jsx
 import React, { createContext, useState, useContext } from "react";
 
 const PageLoaderContext = createContext();
