@@ -31,12 +31,11 @@ export default function HeroSection() {
       {/* Background Image & Gradients */}
       {/* ---------------------- */}
       <div className="absolute inset-0 z-0">
-      <img
-        src={`${import.meta.env.BASE_URL}dark-knight-movie-backdrop.jpg`}
-        alt="Featured Movie Background"
-        className="w-full h-full object-cover"
-      />
-
+        <img
+          src="/dark-knight-movie-backdrop.jpg"
+          alt="Featured Movie Background"
+          className="w-full h-full object-cover"
+        />
 
         {/* Horizontal gradient overlay */}
         <div
