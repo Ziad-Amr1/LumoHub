@@ -9,7 +9,7 @@ import RouteChangeHandler from "./components/Loader/LoaderOverlay";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename="/LumoHub">
+   <BrowserRouter basename="/LumoHub/">
       <AppProviders>
         {/* Main App */}
         <RouteChangeHandler />
