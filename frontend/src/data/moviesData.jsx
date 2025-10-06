@@ -1,3 +1,4 @@
+// File: frontend/src/data/moviesData.jsx
 const moviesData = [
     {
         "id": 617126,

@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Moon, Sun, User, Search, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+// 🟢 استخدام الداتا المحلية بدل API
+import moviesData from "../data/moviesData.jsx";
+
 // Context & hooks
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +18,7 @@ import { useMobileMenu } from "../hooks/useMobileMenu";
  * - Responsive with mobile & desktop menus
  * - Supports dark/light theme toggle
  * - Shows user avatar & menu
- * - Includes random movie navigation
+ * - Includes random movie navigation (محلي مؤقتًا)
  */
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -31,9 +34,17 @@ export default function Navbar() {
 
   const [movies, setMovies] = useState([]);
 
-  // -------------------------
-  // Fetch popular movies
-  // -------------------------
+  // ------------------------------------
+  // 🟢 بديل مؤقت: تحميل الأفلام من ملف محلي
+  // ------------------------------------
+  useEffect(() => {
+    setMovies(moviesData);
+  }, []);
+
+  // ------------------------------------
+  // ❌ الجزء الأصلي (تم تعليقه مؤقتًا)
+  // ------------------------------------
+  /*
   useEffect(() => {
     async function fetchMovies() {
       try {
@@ -48,9 +59,10 @@ export default function Navbar() {
     }
     fetchMovies();
   }, []);
+  */
 
   // -------------------------
-  // Navigate to a random movie
+  // 🟣 الانتقال لفيلم عشوائي
   // -------------------------
   const goToRandomMovie = () => {
     if (!movies.length) return;
@@ -59,7 +71,7 @@ export default function Navbar() {
   };
 
   // -------------------------
-  // Close user menu on outside click
+  // إغلاق منيو المستخدم عند الضغط بالخارج
   // -------------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -74,7 +86,7 @@ export default function Navbar() {
   }, []);
 
   // -------------------------
-  // Render JSX
+  // JSX Rendering
   // -------------------------
   return (
     <nav
@@ -87,7 +99,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        {/* Logo */}
+        {/* شعار الموقع */}
         <Link
           to="/"
           className={`flex items-center gap-2 font-bold text-xl ${
@@ -97,7 +109,7 @@ export default function Navbar() {
           🎬 LumoHub
         </Link>
 
-        {/* Desktop Links */}
+        {/* روابط سطح المكتب */}
         <ul className="hidden md:flex gap-8 font-medium">
           {["Home", "Movies"].map((text) => (
             <li key={text}>
@@ -127,37 +139,47 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Actions */}
+        {/* عناصر التحكم */}
         <div className="flex items-center gap-4 relative">
-          {/* Search button */}
+          {/* بحث */}
           <button
             className={`p-2 rounded hidden sm:flex ${
-              isDark ? "hover:bg-dark-bg1 text-dark-text" : "hover:bg-gray-100 text-gray-700"
+              isDark
+                ? "hover:bg-dark-bg1 text-dark-text"
+                : "hover:bg-gray-100 text-gray-700"
             }`}
           >
             <Search size={20} />
           </button>
 
-          {/* Theme toggle */}
+          {/* تبديل الثيم */}
           <button
             onClick={toggleTheme}
             className={`p-2 rounded ${
-              isDark ? "hover:bg-dark-bg1 text-dark-text" : "hover:bg-gray-100 text-gray-700"
+              isDark
+                ? "hover:bg-dark-bg1 text-dark-text"
+                : "hover:bg-gray-100 text-gray-700"
             }`}
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* User menu */}
+          {/* منيو المستخدم */}
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
               className={`p-2 rounded-full overflow-hidden border ${
-                isDark ? "border-dark-text/30 hover:bg-dark-bg1" : "border-gray-300 hover:bg-gray-100"
+                isDark
+                  ? "border-dark-text/30 hover:bg-dark-bg1"
+                  : "border-gray-300 hover:bg-gray-100"
               }`}
             >
               {user?.avatar ? (
-                <img src={user.avatar} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
+                <img
+                  src={user.avatar}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
               ) : (
                 <User size={20} />
               )}
@@ -170,7 +192,9 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg ${
-                    isDark ? "bg-dark-bg2 text-dark-text" : "bg-white text-gray-800"
+                    isDark
+                      ? "bg-dark-bg2 text-dark-text"
+                      : "bg-white text-gray-800"
                   }`}
                 >
                   <ul className="flex flex-col">
@@ -217,10 +241,12 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* قائمة الهاتف */}
           <button
             className={`md:hidden p-2 rounded ${
-              isDark ? "hover:bg-dark-bg1 text-dark-text" : "hover:bg-gray-100 text-gray-700"
+              isDark
+                ? "hover:bg-dark-bg1 text-dark-text"
+                : "hover:bg-gray-100 text-gray-700"
             }`}
             onClick={toggleMobileMenu}
           >
