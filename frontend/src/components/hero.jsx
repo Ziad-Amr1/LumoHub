@@ -32,7 +32,7 @@ export default function HeroSection() {
       {/* ---------------------- */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/dark-knight-movie-backdrop.jpg"
+          src={`${import.meta.env.BASE_URL}dark-knight-movie-backdrop.jpg`}
           alt="Featured Movie Background"
           className="w-full h-full object-cover"
         />
