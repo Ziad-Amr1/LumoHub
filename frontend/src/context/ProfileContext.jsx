@@ -1,39 +1,113 @@
-// src/context/ProfileContext.jsx
-import { createContext, useContext, useState } from "react"
-import { useProfile } from "../hooks/useProfile"
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
 
-const ProfileContext = createContext()
+const ProfileContext = createContext();
 
-export function ProfileProvider({ children }) {
-  const profileData = useProfile()
+export const ProfileProvider = ({ children }) => {
+  const { user } = useAuth();
 
-  // بيانات الأفلام (مؤقتة – ممكن استبدالها بـ API لاحقاً)
-  const [recent] = useState([
-    { id: 1, title: "Inception", image: "/placeholder.svg" },
-    { id: 2, title: "Interstellar", image: "/placeholder.svg" },
-    { id: 3, title: "The Dark Knight", image: "/placeholder.svg" },
-  ])
+  // ✅ تحميل بيانات البروفايل من localStorage أو بيانات افتراضية
+  const [profile, setProfile] = useState(() => {
+    const saved = localStorage.getItem("userProfile");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          name: "Angel",
+          bio: "Creative Architect 🌸",
+          email: "angel@example.com",
+          job: "Architecture Student",
+          location: "Cairo, Egypt",
+          avatar: "https://i.pravatar.cc/150?img=3",
+          background: "linear-gradient(135deg, #6D5BBA, #8E54E9)",
+        };
+  });
 
-  const [favorites] = useState([
-    { id: 4, title: "Shutter Island", image: "/placeholder.svg" },
-    { id: 5, title: "The Matrix", image: "/placeholder.svg" },
-  ])
+  const [formData, setFormData] = useState(profile);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const [watchLater] = useState([
-    { id: 6, title: "Dune: Part Two", image: "/placeholder.svg" },
-    { id: 7, title: "Oppenheimer", image: "/placeholder.svg" },
-  ])
+  // ✅ تحديث formData لما يتغير profile
+  useEffect(() => {
+    setFormData(profile);
+  }, [profile]);
 
-  const value = {
-    ...profileData, // كل ما يخص البروفايل
-    recent,
-    favorites,
-    watchLater,
-  }
+  // ✅ حفظ تلقائي للبروفايل في localStorage عند تغييره
+  useEffect(() => {
+    localStorage.setItem("userProfile", JSON.stringify(profile));
+  }, [profile]);
 
-  return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
-}
+  // ✅ مزامنة بيانات المستخدم (عند تسجيل الدخول)
+  useEffect(() => {
+    const hasProfile = localStorage.getItem("userProfile");
+    if (user && !hasProfile) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        bio: user.bio || prev.bio,
+        avatar: user.avatar || prev.avatar,
+        background: user.cover || prev.background,
+      }));
+    }
+  }, [user]);
 
-export function useProfileContext() {
-  return useContext(ProfileContext)
-}
+  // ✏️ تعديل النصوص
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // 🖼️ رفع صورة البروفايل (Avatar)
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const imageUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({ ...prev, avatar: imageUrl }));
+  };
+
+  // 🌅 رفع خلفية كصورة
+  const handleBackgroundUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const imageUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({ ...prev, background: `url(${imageUrl})` }));
+  };
+
+  // 🎨 تغيير الخلفية إلى تدرج
+  const handleBackgroundChange = (gradient) => {
+    setFormData((prev) => ({ ...prev, background: gradient }));
+  };
+
+  // 💾 حفظ التعديلات
+  const handleSave = () => {
+    setProfile(formData);
+    localStorage.setItem("userProfile", JSON.stringify(formData)); // تأكيد الحفظ
+    setIsEditing(false);
+  };
+
+  // ❌ إلغاء التعديلات
+  const handleCancel = () => {
+    setFormData(profile);
+    setIsEditing(false);
+  };
+
+  return (
+    <ProfileContext.Provider
+      value={{
+        profile,
+        formData,
+        isEditing,
+        setIsEditing,
+        handleChange,
+        handleAvatarUpload,
+        handleBackgroundUpload,
+        handleBackgroundChange,
+        handleSave,
+        handleCancel,
+        setFormData,
+      }}
+    >
+      {children}
+    </ProfileContext.Provider>
+  );
+};
+
+export const useProfile = () => useContext(ProfileContext);
