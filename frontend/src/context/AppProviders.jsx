@@ -4,6 +4,7 @@ import { ThemeProvider } from "./ThemeContext";
 import { AuthProvider } from "./AuthContext";
 import { PageLoaderProvider } from "./PageLoaderContext";
 import { MovieActionsProvider } from "./MovieActionsContext";
+import { ProfileProvider } from "./ProfileContext";
 
 export function AppProviders({ children }) {
   return (
@@ -11,7 +12,9 @@ export function AppProviders({ children }) {
       <AuthProvider>
         <PageLoaderProvider>
           <MovieActionsProvider>
-            {children}
+            <ProfileProvider>
+              {children}
+            </ProfileProvider>
           </MovieActionsProvider>
         </PageLoaderProvider>
       </AuthProvider>
