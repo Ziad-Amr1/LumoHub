@@ -69,7 +69,7 @@ export default function App() {
             }
           />
           <Route
-            path="/movie/:id"
+            path="/movies/:id"
             element={
               <Layout>
                 <MovieDetails />
