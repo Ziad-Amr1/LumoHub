@@ -154,7 +154,7 @@ export default function Navbar() {
             <Search size={20} />
           </button>
 
-          {/* تبديل الثيم */}
+          {/* Toggle Theme */}
           <button
             onClick={toggleTheme}
             className={`p-2 rounded ${
@@ -166,7 +166,7 @@ export default function Navbar() {
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* منيو المستخدم */}
+          {/* Profile Menu */}
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
@@ -176,7 +176,7 @@ export default function Navbar() {
                   : "border-gray-300 hover:bg-gray-100"
               }`}
             >
-              {profile?.avatar ? (
+              {user && profile?.avatar ? (
                 <img
                   src={profile.avatar}
                   alt="avatar"
@@ -254,6 +254,50 @@ export default function Navbar() {
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+
+          {/* Mobile Menu */}
+          <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-full left-0 w-full bg-white dark:bg-dark-bg2 shadow-md md:hidden"
+            >
+              <ul className="flex flex-col p-4 gap-2">
+                <li>
+                  <Link to="/" onClick={toggleMobileMenu}>Home</Link>
+                </li>
+                <li>
+                  <Link to="/movies" onClick={toggleMobileMenu}>Movies</Link>
+                </li>
+                <li>
+                  <button onClick={() => { goToRandomMovie(); toggleMobileMenu(); }}>Random</button>
+                </li>
+                {user ? (
+                  <>
+                    <li>
+                      <Link to="/profile" onClick={toggleMobileMenu}>Profile</Link>
+                    </li>
+                    <li>
+                      <button onClick={() => { logout(); toggleMobileMenu(); }}>Logout</button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link to="/login" onClick={toggleMobileMenu}>Log in</Link>
+                    </li>
+                    <li>
+                      <Link to="/signup" onClick={toggleMobileMenu}>Create Account</Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         </div>
       </div>
     </nav>
