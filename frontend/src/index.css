@@ -32,4 +32,7 @@ html, body {
 body, html {
   width: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-color: var(--color-dark-primary) var(--color-dark-bg2);
+  scrollbar-width: thin;
 }

@@ -98,9 +98,9 @@ export default function HeroSection() {
               {/* Primary Button: Watch Now */}
               <Button
                 size="lg"
-                className={`flex items-center justify-center px-8 py-4 rounded-xl font-semibold shadow-md transform transition duration-200
+                className={`flex items-center justify-center px-8 py-6 rounded-xl font-semibold shadow-md transform transition duration-200
                   ${isDark 
-                    ? "bg-dark-primary text-dark-text hover:bg-dark-accent active:scale-95" 
+                    ? "bg-dark-primary text-dark-text hover:bg-dark-accent hover:text-dark-bg1 active:scale-95" 
                     : "bg-dark-primary text-white hover:bg-light-accent active:scale-95"
                   }`}
                 onClick={() => console.log("Watch Now clicked")}

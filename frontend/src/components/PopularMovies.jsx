@@ -22,7 +22,7 @@ export default function PopularMovies() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
           {movies.map((movie) => (
             <Link
-              to={`/movie/${movie.id}`} 
+              to={`/movies/${movie.id}`} 
               key={movie.id}
               className="relative bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300"
             >

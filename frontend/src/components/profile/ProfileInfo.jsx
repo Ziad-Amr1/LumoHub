@@ -1,8 +1,8 @@
 // src/components/profile/ProfileInfo.jsx
-import { useProfileContext } from "../../context/ProfileContext"
+import { useProfile } from "../../context/ProfileContext";
 
 export default function ProfileInfo() {
-  const { profile } = useProfileContext()
+  const { profile } = useProfile();
 
   return (
     <div className="max-w-3xl mx-auto mt-20 px-6 text-left">
@@ -18,5 +18,5 @@ export default function ProfileInfo() {
         </p>
       </div>
     </div>
-  )
+  );
 }

@@ -1,105 +1,154 @@
-// src/components/profile/ProfileEditDialog.jsx
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "../ui/dialog"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
-import { Label } from "../ui/label"
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar"
-import { Camera, Loader2 } from "lucide-react"
-import { useProfileContext } from "../../context/ProfileContext"
+import React, { useState } from "react";
+import { useProfile } from "../../context/ProfileContext";
 
 export default function ProfileEditDialog() {
   const {
+    profile,
     formData,
-    open,
-    setOpen,
-    loading,
-    handleInputChange,
-    handleImageUpload,
-    handleSubmit,
-  } = useProfileContext()
+    handleChange,
+    handleAvatarUpload,
+    handleBackgroundUpload,
+    handleSave,
+    setIsEditing,
+    setFormData,
+  } = useProfile();
+
+  const [previewBg, setPreviewBg] = useState(formData.background || profile.background);
+  const [previewAvatar, setPreviewAvatar] = useState(formData.avatar || profile.avatar);
+
+  const gradients = [
+    "linear-gradient(135deg, #667eea, #764ba2)",
+    "linear-gradient(135deg, #ff758c, #ff7eb3)",
+    "linear-gradient(135deg, #43cea2, #185a9d)",
+    "linear-gradient(135deg, #ff9966, #ff5e62)",
+    "linear-gradient(135deg, #00c6ff, #0072ff)",
+  ];
+
+  const handleGradientSelect = (gradient) => {
+    setPreviewBg(gradient);
+    setFormData((prev) => ({ ...prev, background: gradient }));
+  };
+
+  const handleBackgroundFile = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewBg(`url(${url})`);
+      handleBackgroundUpload({ target: { files: [file] } });
+    }
+  };
+
+  const handleAvatarFile = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewAvatar(url);
+      handleAvatarUpload({ target: { files: [file] } });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSave();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit Profile</DialogTitle>
-          <DialogDescription>
-            Update your profile details and save changes.
-          </DialogDescription>
-        </DialogHeader>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 px-4">
+      <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-2xl w-full max-w-lg p-6 shadow-xl relative overflow-y-auto max-h-[90vh]">
+        <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Profile Picture */}
-          <div className="flex flex-col items-center space-y-3">
-            <div className="relative">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={formData.profilePicture || "/placeholder.svg"} />
-                <AvatarFallback>
-                  {formData.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <label
-                htmlFor="profile-picture"
-                className="absolute bottom-0 right-0 p-2 bg-primary rounded-full cursor-pointer hover:bg-primary/90 transition-colors"
-              >
-                <Camera className="h-4 w-4 text-primary-foreground" />
-              </label>
-              <input
-                id="profile-picture"
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </div>
-          </div>
+        {/* 🖼️ معاينة الخلفية */}
+        <div
+          className="rounded-xl h-40 mb-6 flex items-center justify-center text-white font-medium text-lg shadow-inner"
+          style={{
+            background: previewBg?.includes("url")
+              ? `${previewBg} center/cover no-repeat`
+              : previewBg || "linear-gradient(135deg, #667eea, #764ba2)",
+          }}
+        >
+          Background Preview
+        </div>
 
-          {/* Inputs */}
-          {["name", "email", "job", "location"].map((field) => (
-            <div key={field}>
-              <Label htmlFor={field}>{field[0].toUpperCase() + field.slice(1)}</Label>
-              <Input
-                id={field}
-                type={field === "email" ? "email" : "text"}
-                value={formData[field]}
-                onChange={(e) => handleInputChange(field, e.target.value)}
-                required={["name", "email"].includes(field)}
-              />
-            </div>
-          ))}
-
-          <div>
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea
-              id="bio"
-              rows={3}
-              value={formData.bio}
-              onChange={(e) => handleInputChange("bio", e.target.value)}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* 👤 Avatar Preview */}
+          <div className="flex flex-col items-center gap-2">
+            <img
+              src={previewAvatar}
+              alt="Avatar Preview"
+              className="w-24 h-24 rounded-full object-cover border border-gray-300 shadow"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarFile}
+              className="text-sm bg-gray-100 dark:bg-gray-800 px-1 py-1 rounded-md cursor-pointer"
             />
           </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+          {/* ✏️ Name */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+            />
+          </div>
+
+          {/* 📝 Bio */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Bio</label>
+            <textarea
+              name="bio"
+              value={formData.bio || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 h-24 resize-none"
+            />
+          </div>
+
+          {/* 🎨 Background Options */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Background</label>
+            <div className="flex flex-wrap gap-3 mb-3">
+              {gradients.map((g, i) => (
+                <div
+                  key={i}
+                  className={`w-12 h-12 rounded-lg cursor-pointer border-2 ${
+                    previewBg === g ? "border-primary" : "border-transparent"
+                  }`}
+                  style={{ background: g }}
+                  onClick={() => handleGradientSelect(g)}
+                />
+              ))}
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleBackgroundFile}
+              className="text-sm bg-gray-100 dark:bg-gray-800 px-1 py-1 rounded-md cursor-pointer"
+            />
+          </div>
+
+          {/* 🔘 Buttons */}
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+            >
               Cancel
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-dark-primary text-white hover:bg-primary/90 transition"
+            >
               Save
-            </Button>
-          </DialogFooter>
+            </button>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
-  )
+      </div>
+    </div>
+  );
 }

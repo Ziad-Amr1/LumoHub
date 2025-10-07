@@ -12,6 +12,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { useScrollState } from "../hooks/useScrollState";
 import { useMobileMenu } from "../hooks/useMobileMenu";
+import { useProfile } from "../context/ProfileContext.jsx"
 
 /**
  * Navbar component for the app
@@ -33,6 +34,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [movies, setMovies] = useState([]);
+  const { profile } = useProfile();
 
   // ------------------------------------
   // 🟢 بديل مؤقت: تحميل الأفلام من ملف محلي
@@ -174,9 +176,9 @@ export default function Navbar() {
                   : "border-gray-300 hover:bg-gray-100"
               }`}
             >
-              {user?.avatar ? (
+              {profile?.avatar ? (
                 <img
-                  src={user.avatar}
+                  src={profile.avatar}
                   alt="avatar"
                   className="w-8 h-8 rounded-full object-cover"
                 />
